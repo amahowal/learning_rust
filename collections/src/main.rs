@@ -1,3 +1,5 @@
+pub mod hashmaps;
+
 enum SpreadsheetCell {
     Int(i32),
     Float(f64),
@@ -53,4 +55,7 @@ fn main() {
         SpreadsheetCell::Text(String::from("blue")),
         SpreadsheetCell::Float(10.12),
     ];
+
+    // Do some hashmap stuff
+    hashmaps::do_a_thing();
 }
