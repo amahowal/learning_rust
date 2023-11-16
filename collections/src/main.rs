@@ -1,4 +1,7 @@
 pub mod hashmaps;
+use std::fs::File;
+use std::io::{self, Read};
+use std::io::ErrorKind;
 
 enum SpreadsheetCell {
     Int(i32),
@@ -6,7 +9,65 @@ enum SpreadsheetCell {
     Text(String),
 }
 
+fn read_username_from_file_more_concise() -> Result<String, io::Error> {
+    // This can be done more concisely by combining the file and username
+    let mut username = String::new();
+
+    File::open("hello.txt")?.read_to_string(&mut username)?;
+
+    Ok(username)
+}
+
+fn read_username_from_file_concise() -> Result<String, io::Error> {
+    // Using the ? operator is a shortcut to propagating errors
+    let mut username_file = File::open("hello.txt")?;
+    // The ? follows a Result value, if the value is T we return from this expression
+    // if the value is Err, we return the Error TO THE CALLER
+    let mut username = String::new();
+    username_file.read_to_string(&mut username)?;
+    // The ? also converts the returned error to the type defined in the return type
+    Ok(username)
+}
+fn read_username_from_file() -> Result<String, io::Error> {
+    // This returns the username OR an error to be dealt with by the caller
+    let username_file_result = File::open("hello.txt");
+
+    let mut username_file = match username_file_result {
+        Ok(file) => file,
+        Err(e) => return Err(e),
+    };
+
+    let mut username = String::new();
+
+    match username_file.read_to_string(&mut username) {
+        Ok(_) => Ok(username),
+        Err(e) => Err(e),
+    }
+}
+
 fn main() {
+    // Results
+    let greeting_file_result = File::open("hello.txt");
+    // Generic type T in Result is now fs::File, E is now io:Error
+
+    // Now handle the result with match
+    let greeting_file = match greeting_file_result {
+        Ok(file) => file,
+        // More basic error handling
+        // Err(error) => panic!("Problem opening the file: {:?}", error),
+        Err(error) => match error.kind() {
+            // Try to create the file if it's not there
+            ErrorKind::NotFound => match File::create("hello.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("Problem creating the file: {:?}", e),
+            },
+            other_error => {
+                panic!("Problem opening the file: {:?}", other_error);
+            }
+        },
+        // This same logic can be accomplished more concisely with closures
+    };
+
     // This is a string literal, no concat
     let s = "Sup nerds";
     // This makes it a String
