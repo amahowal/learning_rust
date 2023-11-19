@@ -1,3 +1,5 @@
+use generics_and_lifetimes::{Summary, Tweet};
+
 // Good performance of generics is achieved by monomorphism
 struct Point<X1, Y1> {
     x: X1,
@@ -18,11 +20,11 @@ impl<X1, Y1> Point<X1, Y1> {
 // impl Point<T> {
 
 // This method is declared ONLY on the concrete type f32 substitute for the generic
-impl Point<f32> {
-    fn distance_from_origin(&self) -> f32 {
-        (self.x.powi(2) + self.y.powi(2)).sqrt()
-    }
-}
+//impl Point<f32> {
+//    fn distance_from_origin(&self) -> f32 {
+//        (self.x.powi(2) + self.y.powi(2)).sqrt()
+//    }
+//}
 
 // This is the std lib option enum
 enum Option<T> {
@@ -35,9 +37,9 @@ fn largest<T>(list: &[T]) -> &T {
 
     for item in list {
         // This won't work unless we restrict possible types T to ones that can do >
-        if item > largest {
-            largest = item;
-        }
+        //if item > largest {
+        //    largest = item;
+        //}
     }
 
     largest
@@ -67,4 +69,15 @@ fn main() {
     let p3 = p1.mixup(p2);
 
     println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
+
+    let tweet = Tweet {
+        username: String::from("horse_ebooks"),
+        content: String::from(
+            "of course, as you probably already know, people",
+        ),
+        reply: false,
+        retweet: false,
+    };
+
+    println!("1 new tweet: {}", tweet.summarize());
 }
