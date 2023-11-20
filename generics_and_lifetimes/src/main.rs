@@ -79,5 +79,6 @@ fn main() {
         retweet: false,
     };
 
+    // We can only call the trait method when we bring the trait Summary AND the type Tweet into scope
     println!("1 new tweet: {}", tweet.summarize());
 }
