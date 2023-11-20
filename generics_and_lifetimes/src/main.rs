@@ -81,4 +81,29 @@ fn main() {
 
     // We can only call the trait method when we bring the trait Summary AND the type Tweet into scope
     println!("1 new tweet: {}", tweet.summarize());
+
+    // Playing with trait lifetimes
+    let string1 = String::from("abcd");
+    let string2 = "xyz";
+
+    // These are string slices (which are references)
+    let result = longest(string1.as_str(), string2);
+    println!("The longest string is {}", result);
 }
+
+// We must annotate the lifetimes
+// When all the lifetimes are annotated with the generic 'a this means that all reference
+// parameters must have a lifetime of at least 'a
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    // The compiler doesn't know whether we're returning a reference to x or y and doesn't know
+    // the lifetime so it won't compile!
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+
+// &i32 this is a reference
+// &'a i32 this is an explicit lifetime annotation on a reference
+// &'a mut i32 this is an explicit lifetime annotation on a mutable reference
