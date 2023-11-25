@@ -11,3 +11,11 @@ another option is running tests by name like so `cargo test greater_than_100`
 this is the same as running tests by a regular expression "contains"
 
 if we have tests marked as ignored we can run those specifically by doing `cargo test -- --ignored`
+
+integration tests live in the `tests` directory
+three types of tests
+1. unit
+2. integration
+3. doc
+
+we can run a specific integration suite with `cargo test --test integration_test`

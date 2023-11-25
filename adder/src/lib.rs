@@ -1,3 +1,7 @@
+fn internal_adder(a: i32, b: i32) -> i32 {
+    a + b
+}
+
 pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
@@ -49,6 +53,11 @@ impl Guess {
 #[cfg(test)]
 mod tests {
     use super::*;
+    // internal test
+    #[test]
+    fn internal() {
+        assert_eq!(4, internal_adder(2, 2));
+    }
 
     // it works with Result type
     #[test]
@@ -88,6 +97,7 @@ mod tests {
 
     // use format to print custom debugging messages in test
     #[test]
+    #[ignore]
     fn greeting_contains_name() {
         let result = greeting("Carol");
         // This isn't ass informative as using the optional format argument
