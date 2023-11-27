@@ -28,8 +28,28 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 
     println!("With text:\n{contents}");
 
+    // do the actual search
+    for line in search(&config.query, &contents) {
+        println!("{line}");
+    }
+
     // Unit type wrapped in Ok
     Ok(())
+}
+
+// lifetime on contents argument and return value a
+// we are returning a vector of references to slices of contents so the return must live at least
+// as long as contents
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.contains(query) {
+            results.push(line);
+        }
+    }
+
+    results
 }
 
 #[cfg(test)]
@@ -39,6 +59,7 @@ mod tests {
     #[test]
     fn one_result() {
         let query = "duct";
+        // This backslash tells the compiler not to prepend a newline char
         let contents = "\
 Rust:
 safe, fast, productive.
