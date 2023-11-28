@@ -12,7 +12,7 @@ fn main() {
     // parse configuration args here
     let config = Config::build(&args).unwrap_or_else(|err| {
         // the |err| here is a closure, which is an anonymous function
-        println!("ERROR: Problem parsing arguments: {err}");
+        eprintln!("ERROR: Problem parsing arguments: {err}");
         process::exit(1);
     });
     println!("Searching for {}", config.query);
@@ -22,7 +22,7 @@ fn main() {
     // this error handling is similar to "unwrap_or_else" except that we return the unit type in
     // the success case so we only need to deal with an error, no need to unwrap a success returnj
     if let Err(e) = minigrep::run(config) {
-        println!("Application error: {e}");
+        eprintln!("Application error: {e}");
         process::exit(1);
     }
 }
