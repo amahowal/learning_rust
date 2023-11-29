@@ -5,16 +5,23 @@ use minigrep::Config;
 
 fn main() {
     // The first item in the arguments list will be the path to the binary
-    let args: Vec<String> = env::args().collect();
+    //let args: Vec<String> = env::args().collect();
     // TODO: why does debug borrow args here?
     //dbg!(args);
 
-    // parse configuration args here
-    let config = Config::build(&args).unwrap_or_else(|err| {
-        // the |err| here is a closure, which is an anonymous function
-        eprintln!("ERROR: Problem parsing arguments: {err}");
+    // THIS IS BETTER THAN THE EARLIER VERSION B/C WE ARE PASSING THE ITERATOR TO BUILD
+    // INSTEAD OF BORROWING THE COLLECTED SLICE AND CLONING
+    let config = Config::build(env::args()).unwrap_or_else(|err| {
+        eprintln!("Problem parsing arguments: {err}");
         process::exit(1);
     });
+
+    // parse configuration args here
+    //let config = Config::build(&args).unwrap_or_else(|err| {
+        // the |err| here is a closure, which is an anonymous function
+    //    eprintln!("ERROR: Problem parsing arguments: {err}");
+    //    process::exit(1);
+    //});
     println!("Searching for {}", config.query);
     println!("In file {}", config.file_path);
 
