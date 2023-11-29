@@ -6,6 +6,12 @@ use std::time::Duration;
 // 3. take ownership
 // functions take parameters this way while closures take these from their environment
 
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
 #[derive(Debug, PartialEq, Copy, Clone)]
 enum ShirtColor {
     Red,
@@ -40,6 +46,15 @@ impl Inventory {
 }
 
 fn main() {
+    // "iterator adapters" consume the first iterator and create a new iterator
+    let v1: Vec<i32> = vec![1, 2, 3];
+
+    // but we have to call collect, otherwise the iterator created from map is not consumed
+    // "consuming adapters" consume the iterator they are called on, in this case "collect"
+    let v2: Vec<_> = v1.iter().map(|x| x + 1).collect();
+
+    assert_eq!(v2, vec![2, 3, 4]);
+
     let mut list = [
         Rectangle { width: 10, height: 1 },
         Rectangle { width: 3, height: 5 },
