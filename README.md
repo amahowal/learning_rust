@@ -19,3 +19,5 @@ three types of tests
 3. doc
 
 we can run a specific integration suite with `cargo test --test integration_test`
+
+to create docs locally and look at them use `cargo doc --open`
