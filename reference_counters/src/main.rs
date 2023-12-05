@@ -1,3 +1,7 @@
+// KEY CONCEPT: Interior mutability, which allows you to mutate data even when there are immutable
+// references to it. This is disallowed by the compiler, but we use "unsafe" code to accomplish
+// this and wrap it in a "safe" API for the user.
+
 enum List {
     // Box won't work because more than one owns it
     // could use lifetimes, but won't always be certain about them
@@ -26,4 +30,7 @@ fn main() {
     println!("count after c goes out of scope = {}", Rc::strong_count(&a));
     // This is great!!! But also immutable or else we could modify data without other parts of our
     // logic knowing about it! Enter: RefCell<T>
+
+    // With RefCell<T> the borrowing rules invariants are enforced AT RUNTIME
+    //
 }
