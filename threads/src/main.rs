@@ -26,7 +26,9 @@ fn main() {
     let v = vec![1, 2, 3];
 
     // THIS WON'T WORK WITH AN EMPTY CLOSURE
-    let handle = thread::spawn(|| {
+    //let handle = thread::spawn(|| {
+    // USE MOVE, we don't need to tell it to move "v", the compiler can infer it!
+    let handle = thread::spawn(move || {
         println!("Here's a vector: {:?}", v);
     });
 
