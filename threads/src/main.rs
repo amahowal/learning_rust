@@ -1,5 +1,6 @@
 use std::thread;
 use std::time::Duration;
+use std::sync::mpsc;
 
 fn main() {
     // This thread ends up stopping prematurely because the main thread that is counting to 5 gets
@@ -33,4 +34,21 @@ fn main() {
     });
 
     handle.join().unwrap();
+
+    // Multiple Producer Single Consumer channel
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let val = String::from("hi");
+        // Send returns a result, in a robust application we'd handle this instead of unwrap
+        tx.send(val).unwrap();
+        // If we try to print val after we sent it on the channel, we'll get an error. This could
+        // be a concurrency mistake waiting to happen!!
+        //println!("val is {}", val);
+    });
+
+    // we also could use try_recv which returns a Result, useful for threads that do other stuff
+    // and also check for messages every now and then
+    let received = rx.recv().unwrap();
+    println!("Got: {}", received);
 }
