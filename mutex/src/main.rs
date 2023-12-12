@@ -1,0 +1,26 @@
+use std::rc::Rc;
+use std::sync::Mutex;
+use std::thread;
+
+fn main() {
+    let counter = Rc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Rc::clone(&counter);
+        let handle = thread::spawn(move || {
+            // lock returns a MutexGuard in a LockResult
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        // when the guard goes out of scope it has a Drop implementation that releases the lock
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Result: {}", *counter.lock().unwrap());
+}
