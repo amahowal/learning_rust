@@ -1,9 +1,60 @@
+/*
 pub struct Post {
     // Box<dyn State> is a trate object which is anything that implements State
     state: Option<Box<dyn State>>,
     content: String,
 }
+*/
 
+pub struct Post {
+    // PRIVATE content field
+    content: String,
+}
+
+// State is encoded into struct TYPE so we don't need a state field anymore
+pub struct DraftPost {
+    // PRIVATE content field
+    content: String,
+}
+
+impl Post {
+    pub fn new() -> DraftPost {
+        DraftPost {
+            content: String::new(),
+        }
+    }
+
+    pub fn content(&self) -> &str {
+        &self.content
+    }
+}
+
+impl DraftPost {
+    // Without a content method, it is IMPOSSIBLE for the user to return draft content of any kind
+    pub fn add_text(&mut self, text: &str) {
+        self.content.push_str(text);
+    }
+    pub fn request_review(self) -> PendingReviewPost {
+        PendingReviewPost {
+            content: self.content,
+        }
+    }
+}
+
+
+pub struct PendingReviewPost {
+    content: String,
+}
+
+impl PendingReviewPost {
+    pub fn approve(self) -> Post {
+        Post {
+            content: self.content,
+        }
+    }
+}
+
+/*
 impl Post {
     // state is private so the ONLY way to create a Post is to set the initial state to Draft
     pub fn new() -> Post {
@@ -32,6 +83,7 @@ impl Post {
         }
     }
 }
+*/
 
 trait State {
     fn request_review(self: Box<Self>) -> Box<dyn State>;
